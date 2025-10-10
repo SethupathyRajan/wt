@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="marksApp">
+<head>
+  <meta charset="UTF-8">
+  <title>Student Marks Dashboard</title>
+  <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.8.2/angular.min.js"></script>
+  <script src="app.js"></script>
+  <style>
+    table { border-collapse: collapse; margin: 20px auto; width: 50%; }
+    th, td { border: 1px solid black; padding: 8px; text-align: center; }
+    th { background-color: #f2f2f2; }
+    .pass { color: green; font-weight: bold; }
+    .fail { color: red; font-weight: bold; }
+    .distinction { color: blue; font-weight: bold; }
+    .form-container { text-align: center; margin: 20px; }
+    input { margin: 5px; padding: 5px; }
+    button { padding: 5px 10px; }
+  </style>
+</head>
+<body ng-controller="MarksController as ctrl">
+
+  <h2 style="text-align:center;">Student Marks Dashboard</h2>
+
+  <div class="form-container">
+    <input type="text" ng-model="ctrl.newStudentName" placeholder="Student Name">
+    <input type="number" ng-model="ctrl.newStudentMarks" placeholder="Marks">
+    <button ng-click="ctrl.addStudent()">Add Student</button>
+  </div>
+
+
+  <table>
+    <tr>
+      <th>Name</th>
+      <th>Marks</th>
+      <th>Grade</th>
+    </tr>
+    <tr ng-repeat="student in ctrl.students" student-row student="student"></tr>
+  </table>
+
+</body>
+</html>

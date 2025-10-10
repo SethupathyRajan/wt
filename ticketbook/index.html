@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="movieApp">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Movie Ticket Booking</title>
+  <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.8.2/angular.min.js"></script>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body ng-controller="BookingController as ctrl">
+
+  <h2>Online Movie Ticket Booking</h2>
+<p>
+    Name: <input type="text" ng-model="ctrl.name" placeholder="Enter your name">
+  </p>
+  <table border="1" align="center">
+    <tr ng-repeat="row in ctrl.seats">
+      <td ng-repeat="seat in row"
+          ng-click="ctrl.toggleSeat(seat)"
+          ng-class="{'selected': seat.selected, 'booked': seat.booked}">
+        {{seat.label}}
+      </td>
+    </tr>
+  </table>
+
+  <p>Selected Seats: {{ctrl.selectedSeats.join(', ') || 'None'}}</p>
+  <p>Total: ₹{{ctrl.selectedSeats.length * 150}}</p>
+
+  <button ng-click="ctrl.bookSeats()" ng-disabled="ctrl.selectedSeats.length==0">Book Now</button>
+  <h3>Booked Tickets</h3>
+  <ul>
+    <li ng-repeat="b in ctrl.bookedtickets">
+      {{b.name}} → {{b.seat}}
+    </li>
+  </ul>
+
+<script>
+    var app = angular.module('movieApp', []);
+
+app.controller('BookingController', ['$http', function($http) {
+  var self = this;
+  var apiString = "http://localhost:3000/"
+
+  self.seats = [];
+  self.bookedtickets = [];
+  for (let r = 0; r < 5; r++) {
+    let row = [];
+    for (let c = 0; c < 8; c++) {
+      row.push({ label: String.fromCharCode(65 + r) + (c + 1), selected: false, booked: false });
+    }
+    self.seats.push(row);
+  }
+
+  self.selectedSeats = [];
+
+  self.loadData = function() {
+    $http.get(`${apiString}booked`).then(function(res) {
+      const allBookings = res.data;
+      const bookedSeats = allBookings.flatMap(b => b.seats);
+      bookedSeats.forEach(label => {
+        const seat = self.seats.flat().find(s => s.label === label);
+        if (seat) seat.booked = true;
+      });
+      self.bookedtickets = allBookings.flatMap(b => b.seats.map(seat => ({name: b.name, seat})));
+    }).catch(function(err) {
+      console.error('Failed to load booked seats:', err);
+    });
+  };
+
+  self.toggleSeat = function(seat) {
+    if (seat.booked) return;
+    seat.selected = !seat.selected;
+    if (seat.selected)
+      self.selectedSeats.push(seat.label);
+    else
+      self.selectedSeats = self.selectedSeats.filter(s => s !== seat.label);
+  };
+
+  
+  self.bookSeats = function() {
+    $http.post(`${apiString}book`, {name: self.name , seats: self.selectedSeats })
+      .then(function(res) {
+        alert('Booking Successful!');
+        self.selectedSeats.forEach(label => {
+          self.seats.flat().find(s => s.label === label).booked = true;
+        });
+        self.selectedSeats = [];
+        self.name = '';
+        self.loadData();
+      })
+      .catch(function(err) {
+        alert('Booking failed.');
+      });
+  };
+
+  self.loadData();
+
+}]);
+</script>
+</body>
+</html>

@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="chatApp">
+<head>
+  <meta charset="UTF-8">
+  <title>AngularJS Chat App</title>
+  <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.8.2/angular.min.js"></script>
+  <script src="app.js"></script>
+  <style>
+    body { font-family: Arial; text-align:center; }
+    #chatBox { width: 50%; height: 300px; border: 1px solid #ccc; margin: 20px auto; overflow-y: scroll; padding: 10px; text-align:left; }
+    .message { margin: 5px 0; }
+    .name { font-weight: bold; }
+    input, button { margin: 5px; padding: 5px; }
+  </style>
+</head>
+<body ng-controller="ChatController as ctrl">
+
+  <h2>Simple Chat App</h2>
+
+  <div>
+    Name: <input type="text" ng-model="ctrl.name" placeholder="Enter your name">
+  </div>
+  <div>
+    Message: <input type="text" ng-model="ctrl.text" placeholder="Type a message">
+    <button ng-click="ctrl.sendMessage()">Send</button>
+  </div>
+
+  <div id="chatBox">
+    <div class="message" ng-repeat="msg in ctrl.messages">
+      <span class="name">{{msg.name}}:</span> {{msg.text}}
+    </div>
+  </div>
+
+</body>
+</html>

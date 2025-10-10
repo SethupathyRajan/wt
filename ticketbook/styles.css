@@ -1,0 +1,30 @@
+body {
+  font-family: Arial;
+  text-align: center;
+  margin-top: 20px;
+}
+
+table {
+  border-collapse: collapse;
+}
+
+td {
+  width: 35px;
+  height: 35px;
+  text-align: center;
+  cursor: pointer;
+}
+
+.selected {
+  background-color: lightgreen;
+}
+
+.booked {
+  background-color: lightcoral;
+  cursor: not-allowed;
+}
+
+button {
+  margin-top: 10px;
+  padding: 6px 12px;
+}

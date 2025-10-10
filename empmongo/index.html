@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="empApp">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Employee Management System</title>
+<link rel="stylesheet" href="styles.css"> 
+  <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.8.2/angular.min.js"></script>
+</head>
+
+<body ng-controller="EmpCtrl">
+  <div class="container">
+    <h2>Employee Manager</h2>
+
+    <input ng-model="emp.name" placeholder="Employee Name">
+    <input ng-model="emp.role" placeholder="Role / Position">
+    <input ng-model="emp.salary" placeholder="Salary">
+
+    <button ng-click="addEmp()" ng-if="!editMode">Add Employee</button>
+    <button ng-click="updateEmp()" ng-if="editMode">Update Employee</button>
+
+    <ul>
+      <li ng-repeat="e in employees">
+        <span>{{e.name}} - {{e.role}} - ₹{{e.salary}}</span>
+        <div class="actions">
+          <button ng-click="editEmp(e)">Edit</button>
+          <button ng-click="deleteEmp(e._id)">Delete</button>
+        </div>
+      </li>
+    </ul>
+  </div>
+
+  <script>
+    var app = angular.module('empApp', []);
+
+    app.controller('EmpCtrl', function($scope, $http) {
+      const url = 'http://localhost:3000/employees';
+      $scope.employees = [];
+      $scope.emp = {};
+      $scope.editMode = false;
+
+   
+      function loadData() {
+        $http.get(url).then(res => $scope.employees = res.data);
+      }
+
+ 
+      $scope.addEmp = function() {
+        if (!$scope.emp.name || !$scope.emp.role) return alert("Please fill all fields!");
+        $http.post(url, $scope.emp).then(() => {
+          $scope.emp = {};
+          loadData();
+        });
+      };
+
+
+      $scope.editEmp = function(e) {
+        $scope.emp = angular.copy(e);
+        $scope.editMode = true;
+      };
+
+  
+      $scope.updateEmp = function() {
+        $http.put(`${url}/${$scope.emp._id}`, $scope.emp).then(() => {
+          $scope.emp = {};
+          $scope.editMode = false;
+          loadData();
+        });
+      };
+
+
+      $scope.deleteEmp = function(id) {
+        if (confirm("Delete this employee?")) {
+          $http.delete(`${url}/${id}`).then(loadData);
+        }
+      };
+
+      loadData(); 
+    });
+  </script>
+</body>
+</html>
