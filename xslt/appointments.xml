@@ -1,0 +1,16 @@
+<?xml version="1.0"?>
+<?xml-stylesheet type="text/xsl" href="appointments.xsl"?>
+<appointments>
+    <appointment>
+    <patient>John Doe</patient>
+    <doctor>Dr. Smith</doctor>
+    <date>2025-10-15</date>
+    <time>10:00</time>
+    </appointment>
+    <appointment>
+    <patient>Mary Jane</patient>
+    <doctor>Dr. Allen</doctor>
+    <date>2025-10-16</date>
+    <time>14:00</time>
+    </appointment>
+</appointments>

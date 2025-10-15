@@ -1,0 +1,15 @@
+<?xml version="1.0"?>
+<?xml-stylesheet type="text/xsl" href="events.xsl"?>
+
+<events>
+    <event>
+    <name>Code Feast</name>
+    <date>2025-10-20</date>
+    <category>Upcoming</category>
+    </event>
+    <event>
+    <name>Tech Talk</name>
+    <date>2025-10-10</date>
+    <category>Done</category>
+    </event>
+</events>

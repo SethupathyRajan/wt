@@ -1,0 +1,14 @@
+table, th, td{
+    border: 1px solid black;
+    border-collapse: collapse;
+    padding: 5px;
+}
+
+.fade.ng-enter{
+    transition:5s;
+    opacity:0;
+}
+
+.fade.ng-enter-active{
+    opacity:1;
+}
