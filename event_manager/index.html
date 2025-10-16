@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="eventApp">
+<head>
+  <meta charset="UTF-8">
+  <title>Event Registration Platform</title>
+  <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.8.2/angular.min.js"></script>
+  <style>
+    body { font-family: Arial; margin: 20px; }
+    input, select, button { margin: 5px; padding: 5px; }
+    table { border-collapse: collapse; width: 100%; margin-top: 15px; }
+    th, td { border: 1px solid #ccc; padding: 6px; text-align: left; }
+    .completed { background-color: #c8e6c9; }
+    .upcoming { background-color: #fff9c4; }
+  </style>
+    <script src="app.js"></script>
+</head>
+<body ng-controller="EventController">
+
+  <h2>Event Registration Platform</h2>
+
+
+  <h3>Add / Update Event</h3>
+  <form ng-submit="addOrUpdateEvent()">
+    <input type="text" ng-model="event.name" placeholder="Event Name" required>
+    <input type="text" ng-model="event.category" placeholder="Category" required>
+    <input type="date" ng-model="event.date" required>
+    <select ng-model="event.status">
+      <option>Upcoming</option>
+      <option>Completed</option>
+    </select>
+    <button type="submit">{{ editMode ? "Update" : "Add" }}</button>
+    <button type="button" ng-click="resetForm()">Clear</button>
+  </form>
+
+
+  <h3>Events</h3>
+  <label>Filter by Category:</label>
+  <input type="text" ng-model="categoryFilter">
+
+  <table>
+    <tr>
+      <th>Event Name</th>
+      <th>Category</th>
+      <th>Date</th>
+      <th>Status</th>
+      <th>Actions</th>
+    </tr>
+    <tr ng-repeat="e in events | filter:{ category: categoryFilter }"
+        ng-class="{'completed': e.status == 'Completed', 'upcoming': e.status == 'Upcoming'}">
+      <td>{{ e.name }}</td>
+      <td>{{ e.category }}</td>
+      <td>{{ e.date | date }}</td>
+      <td>{{ e.status }}</td>
+      <td>
+        <button ng-click="editEvent(e)">Edit</button>
+        <button ng-click="deleteEvent(e._id)">Delete</button>
+      </td>
+    </tr>
+  </table>
+
+ 
+  <h3>Register Participant</h3>
+  <form ng-submit="registerParticipant()">
+    <input type="text" ng-model="participant.name" placeholder="Name" required>
+    <input type="text" ng-model="participant.department" placeholder="Department" required>
+    <select ng-model="participant.eventName" required
+            ng-options="e.name for e in events"></select>
+    <button type="submit">Register</button>
+  </form>
+
+  <h3>Registered Participants</h3>
+  <table>
+    <tr>
+      <th>Name</th>
+      <th>Department</th>
+      <th>Event</th>
+      <th>Date</th>
+    </tr>
+    <tr ng-repeat="p in participants">
+      <td>{{ p.name }}</td>
+      <td>{{ p.department }}</td>
+      <td>{{ p.eventName }}</td>
+      <td>{{ p.registrationDate | date:'short' }}</td>
+    </tr>
+  </table>
+
+
+</body>
+</html>
